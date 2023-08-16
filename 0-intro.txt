@@ -1,0 +1,16 @@
+What is JavaScript?
+JavaScript is also used in more traditional websites to 
+provide various forms of interactivity and cleverness.
+
+JavaScript has almost nothing to do with the 
+programming language named Java.
+
+In practice, the terms ECMAScript and JavaScript can be 
+used interchangeably—they are two names for the same language.
+
+JavaScript is ridiculously liberal in what it allows.
+
+In this book, I’m using the 2017 version of JavaScript.
+
+the Node.js project (the subject of Chapter 20), provide 
+an environment for programming JavaScript outside of the browser.

@@ -1,0 +1,510 @@
+INTRODUCTION
+    A large program is a costly program, and not just because of the time 
+    it takes to build. Size almost always involves complexity, and 
+    complexity confuses programmers. Confused programmers, in turn, 
+    introduce mistakes (bugs) into programs. A large program then provides 
+    a lot of space for these bugs to hide, making them hard to find.
+        
+        Let's consider this function call - 
+            console.log(sum(range(1,10)));
+        
+        The definitions of this vocabulary (the functions sum and range) will 
+        involve loops, counters, and other incidental details. But because they 
+        are expressing simpler concepts than writing the 'CODE AS A WHOLE'(A
+        code without any functions()), they() are easier to get right.
+            Code as a WHOLE
+                let total = 0, count = 1;
+                while (count <= 10) {
+                    total += count;
+                    count += 1;
+                }
+                console.log(total);
+
+
+ABSTRACTION
+    In the context of programming, these kinds of vocabularies(as cited in 
+    function call of sum and range) are usually called 'ABSTRACTIONS'. 
+    'ABSTRACTIONS' hide details and give us the ability to talk about problems 
+    at a higher (or more abstract) level.
+    It is important to maintain a certain level of 'ABSTRACTION' in your code.
+    (Neither too less nor too much Abstraction in your code)
+    Therefore, it is a useful skill, in programming, to notice when you are 
+    working at too low a level of abstraction.
+
+
+ABSTRACT'ING' REPETITION
+    PLAIN CODE 
+        Plain functions, as we’ve seen them so far, are a good way to build 
+        abstractions. But sometimes they fall short.
+
+        It is common for a program to do something a given number of times. 
+        You can write a 'for' loop for that, like this:
+            Code-
+                for (let i = 0; i < 10; i++) {
+                    console.log(i);
+                }
+
+
+    ADDING PLAIN CODE TO A FUNCTION 
+        This helps us to specify 'n' - the no. of times we want to repeat 
+        a task.(In above code this task is console.log).
+            Code-
+                function repeatLog(n) {
+                    for (let i = 0; i < n; i++) {
+                        console.log(i);
+                    }
+                }
+                repeatLog(5);
+                // 1
+                // 2
+                // 3
+                // 4
+                // 5
+
+
+    PASSING FUNCTIONS AS VALUES TO ANOTHER FUNCTION
+        But what if we want to do something other than logging the numbers? 
+        Since “doing something” can be represented as a function and functions
+        are just values, we can pass our action as a function value.
+            Code-
+                function repeat(n, action) {
+                    for(let i = 0; i < n; i++) {
+                        action(i);
+                    }
+                }
+                repeat(3, console.log);
+                // → 0
+                // → 1
+                // → 2
+        
+        The another function we are talking about is a Higher Order Function.
+
+
+    CREATING FUNCTION VALUE ON THE SPOT TO PASS TO OUR H-O-F 
+        We don’t have to pass a predefined function to repeat. Often, it is 
+        easier to create a function value on the spot instead.
+            Code-
+                function repeat(n, action) {
+                    for(let i = 0; i < n; i++) {
+                        action(i);
+                    }
+                }
+                let labels = [];
+                repeat(5, i => {
+                    labels.push(`Unit ${i + 1}`);
+                });
+
+                console.log(labels);
+                // → ["Unit 1", "Unit 2", "Unit 3", "Unit 4", "Unit 5"]
+
+                
+HIGHER-ORDER FUNCTIONS ( H-O-F) 
+    Functions that operate on other functions, either by taking them as 
+    arguments or by returning them, are called 'HIGHER-ORDER FUNCTIONS'. 
+    Since we have already seen that "functions are regular values", there 
+    is nothing particularly remarkable about the fact that such functions 
+    exist. The term comes from mathematics, where the distinction between 
+    functions and other values is taken more seriously.
+
+    RETURNING NEW FUNCTIONS FROM A FUNCTION 
+        Code-
+            function greaterThan(n) {
+                return m => m > n;
+            }
+            let greaterThan10 = greaterThan(10);
+            console.log(greaterThan10(11));
+            // → true
+
+    RETURNING FUNCTIONS THAT CHANGE OTHER FUNCTIONS 
+        Code-
+            function noisy(f) {
+                return (...args) => {
+                                        console.log("calling with", args);
+                                        let result = f(...args);
+                                        console.log("called with", args, ", returned", result);
+                                        return result;
+                                    };
+            }
+            noisy(Math.min)(3, 2, 1);
+            // → calling with [3, 2, 1]
+            // → called with [3, 2, 1] , returned 1
+
+
+    FUNCTIONS THAT PROVIDE NEW TYPES OF CONTROL FLOW
+        Code-
+            function repeat(n, action) {
+                for (let i = 0; i < n; i++) {
+                    action(i);
+                }
+            }
+
+            function unless(test, then) {
+                if (test) then();
+            }
+
+            repeat(3, n => {
+                unless(n % 2 == 0, () => {
+                    console.log(n, " is even");
+                });
+            });
+            // → 0 is even
+            // → 2 is even
+
+    ForEach() Method
+        There is a built-in array method, forEach(), that provides something 
+        like a for/of loop as a higher-order function.
+            Code1-
+                ["A", "B"].forEach(l => console.log(l));
+                // → A
+                // → B
+
+            Code2-
+                [1, 2].forEach(x => console.log(x+10));
+                // → 11
+                // → 12
+
+
+SCRIPT DATA-SET 
+    Higher-order functions are particularly useful in the field of data 
+    processing, and in this chapter, we will explore their application using 
+    a data set that focuses on scripts, such as Latin, Cyrillic, or Arabic.
+
+    In the previous chapter, we learned about Unicode, which assigns a unique 
+    number to each character in a written language. The majority of these 
+    characters are associated with specific scripts. In total, Unicode 
+    recognizes 140 different scripts, out of which 81 are still actively used 
+    today, while 59 are considered historic.
+
+    While personally, I can only fluently read Latin characters, I find it 
+    fascinating that people are actively writing texts in over 80 other writing 
+    systems, many of which I may not even be able to recognize.
+
+    The 'SCRIPTS' binding contains an array of objects, each of which describes a script.
+        Code-
+            {
+            name: "Coptic",
+            ranges: [[994, 1008], [11392, 11508], [11513, 11520]],
+            direction: "ltr",
+            year: -200,
+            living: false,
+            link: "https://en.wikipedia.org/wiki/Coptic_alphabet"
+            }
+        /*
+            This object tells us the name of the script, the Unicode ranges assigned 
+            to it, the direction in which it is written, the (approximate) origin time, 
+            whether it is still in use, and a link to more information. The direction 
+            may be "ltr" for left to right, "rtl" for right to left (the way Arabic 
+            and Hebrew text are written), or "ttb" for top to bottom (as with Mongolian 
+            writing).
+
+            The ranges property contains an array of Unicode character ranges, each of 
+            which is a two-element array containing a lower bound and an upper bound. 
+            Any character codes within these ranges are assigned to the script. The 
+            lower bound is inclusive (code 994 is a Coptic character), and the upper 
+            bound is non-inclusive (code 1008 isn’t).
+        */
+
+
+FILTERING ARRAY 
+    - filter() is a pure function.It does not modify the array it is given.
+    - The Array Filter() property.
+        To find the scripts in the data set that are still in use, the following 
+        function might be helpful. It filters out the elements in an array that 
+        don’t pass a test.
+            Code- 
+                function filter(array, test) {
+                    let passed = [];
+                    for (let element of array) {
+                        if (test(element)) {
+                            passed.push(element);
+                        }
+                    }
+                    return passed;
+                }
+
+                console.log(filter(SCRIPTS, script => script.living));
+                // → [{name: "Adlam", …}, …]
+
+            Note how the filter() function, rather than deleting elements from 
+            the existing array, builds up a new array with only the elements 
+            that pass the test. This function is PURE. It does not modify the 
+            array it is given.
+
+    - Like forEach, filter() is a standard array method. The example defined 
+      the function only to show what it does internally. From now on, we’ll 
+      use it like this instead:
+        Code-
+            console.log(SCRIPTS.filter(s => s.direction == "ttb"));
+            // → [{name: "Mongolian", …}, …]
+
+
+TRANFORM USING MAP
+    The map() method transforms an array by applying a function to all of its 
+    elements and "building a new array" from the returned values. The new 
+    array will have the same length as the input array, but its content will 
+    have been mapped to a new form by the function.
+        Code-
+            function map(array, transform) {
+                let mapped = [];
+                for (let element of array) {
+                    mapped.push(transform(element));
+                }
+                return mapped;
+            }
+
+            let rtlScripts = SCRIPTS.filter(s => s.direction == "rtl");
+            console.log(map(rtlScripts, s => s.name));
+            // → ["Adlam", "Arabic", "Imperial Aramaic", …]
+
+    Like filter(), map() is a standard array method. The example defined 
+      the function only to show what it does internally. From now on, we’ll 
+      use it like this instead:
+        Code-
+            let arr = [10, 20, 30, 40];
+            console.log(arr.map( n => n * 3));
+            // → [30, 60, 90, 120]
+
+
+SUMMARIZE WITH REDUCE
+    Helps compute single value from an array.
+    The higher-order operation that represents this pattern is called reduce 
+    (sometimes also called fold). It builds a value by repeatedly taking a 
+    single element from the array and combining it with the current value. 
+    When summing numbers, you’d start with the number zero and, for each 
+    element, add that to the sum.
+
+    The parameters to reduce() are, apart from the array, a combining function 
+    and a start value. This function is a little less straightforward than 
+    filter and map, so take a close look at it:
+        Code-
+            function reduce(array, combine, start) {
+                let current = start;
+                for (let element of array) {
+                    current = combine(current, element);
+                }
+                return current;
+            }
+
+            console.log(reduce([1, 2, 3, 4], (a, b) => a + b, 0));
+            // → 10
+
+    Like filter()and map(, reduce()) is a standard array method. 
+    The standard array method reduce, which of course corresponds to 
+    the above function, has an added convenience. If your array contains 
+    at least one element, you are allowed to leave off the start 
+    argument. The method will take the first element of the array as 
+    its start value and start reducing at the second element.
+        Code-
+            console.log([1, 2, 3, 4].reduce((a, b) => a + b) );
+            // → 10
+
+    EXAMPLE2- To use reduce (twice) to find the script with the most 
+    characters, we can write something like this:
+        Code-
+            function characterCount(script) {
+                return script.ranges.reduce((count, [from, to]) => {
+                    return count + (to - from);
+                }, 0);
+            }
+
+            console.log(SCRIPTS.reduce((a, b) => {
+                return characterCount(a) < characterCount(b) ? b : a;
+            }));
+            // → {name: "Han", …}
+        /*
+            The characterCount() function reduces the ranges assigned to a script 
+            by summing their sizes. Note the use of destructuring in the 
+            parameter list of the reducer function. The second call to reduce 
+            then uses this to find the largest script by repeatedly comparing two 
+            scripts and returning the larger one.
+        */
+
+
+COMPOSABILITY
+    Higher-order functions start to shine when you need to compose operations. As 
+    an example, let’s write code that finds the average year of origin for living 
+    and dead scripts in the data set.
+        Code-
+            function average(array) {
+                return array.reduce((a, b) => a + b) / array.length;
+            }
+
+            console.log(Math.round(average(SCRIPTS.filter(s => s.living).map(s => s.year))));
+            // → 1165
+            console.log(Math.round(average(SCRIPTS.filter(s => !s.living).map(s => s.year))));
+            // → 204
+        /*
+            You can see the above code as a pipeline: we start with all scripts, 
+            filter out the living (or dead) ones, take the years from those, 
+            average them, and round the result.
+        */
+
+
+STRINGS AND CHARACTER CODES 
+    One use of the data set would be figuring out what script a piece of text is 
+    using. Let’s go through a program that does this.
+        GETTING CHARACTER CODES FOR OUR "SCRIPT"
+            Remember that each script has an array of character code ranges 
+            associated with it. So given a character code, we could use a 
+            function like this to find the corresponding script (if any):
+                Code-
+                    function characterScript(code) {
+                        for (let script of SCRIPTS) {
+                            if (script.ranges.some(([from, to]) => { return code >= from && code < to; })) {
+                                return script;
+
+                            }
+                        }
+                        return null;
+                    }
+
+                    console.log(characterScript(121));
+                    // → {name: "Latin", …}
+
+            The some() method is an in-built higher-order function for arrays. It 
+            takes a test function and tells you whether that function returns true 
+            for any of the elements in the array.
+
+    HOW TO GET CHARACTER CODES FROM A STRING
+        CODE UNITS 
+            JavaScript strings are encoded as a sequence of 16-bit numbers. These are 
+            called "code units".
+
+        UNICODE and UTF-16
+            A Unicode character code was initially supposed to fit within such a code unit 
+            (which gives you a little over 65,000 characters). Many people resisted the 
+            idea of using additional memory per character when it became apparent that the 
+            existing memory allocation was insufficient.
+
+
+            UTF-16 (Unicode Transformation Format, 16-bit) is a character encoding scheme 
+            that represents Unicode characters using 16 bits (2 bytes) of memory. It is a 
+            variable-length encoding, meaning that most common characters are represented 
+            using a single 16-bit code unit, while others require a pair of 16-bit units.
+
+            UTF-16 is generally considered a bad idea today. It seems almost intentionally 
+            designed to invite mistakes. It’s easy to write programs that pretend code 
+            units and characters are the same thing. And if your language doesn’t use 
+            two-unit characters, that will appear to work just fine. But as soon as someone 
+            tries to use such a program with some less common Chinese characters, it breaks. 
+            
+            Fortunately, with the advent of emoji, everybody has started using two-unit 
+            characters, and the burden of dealing with such problems is more fairly distributed.
+
+            Unfortunately, obvious operations on JavaScript strings, such as getting their 
+            length through the length property and accessing their content using square 
+            brackets, deal only with code units.
+                Code-
+                    // Two emoji characters, horse and shoe
+                    let horseShoe = "🐴👟";
+                    console.log(horseShoe.length);
+                    // → 4
+                    console.log(horseShoe[0]);
+                    // → (Invalid half-character)
+                    console.log(horseShoe.charCodeAt(0));
+                    // → 55357 (Code of the half-character)
+                    console.log(horseShoe.codePointAt(0));
+                    // → 128052 (Actual code for horse emoji)
+            
+
+            charCodeAt() and codePointAt() METHODS 
+                JavaScript’s charCodeAt() method gives you a code unit, not a full character code. 
+                The codePointAt() method, added later, does give a full Unicode character. So we 
+                could use that to get characters from a string. But the argument passed to 
+                codePointAt() is still an index into the sequence of code units. So to run over 
+                all characters in a string, we’d still need to deal with the question of whether 
+                a character takes up one or two code units.
+ 
+                In the previous chapter, I mentioned that a for/of loop can also be used on strings. 
+                Like codePointAt, this type of loop was introduced at a time where people were 
+                acutely aware of the problems with UTF-16. When you use it to loop over a string, 
+                it gives you real characters, not code units.
+
+                    Code-
+                        let roseDragon = "🌹🐉";
+                        for (let char of roseDragon) {
+                            console.log(char);
+                        }
+                        // → 🌹
+                        // → 🐉
+                If you have a character (which will be a string of one or two code units), you can 
+                use codePointAt(0) to get its code.
+
+
+
+RECOGNIZING TEXT 
+    The following code is an example of counting abstraction.
+        Code-
+            function countBy(items, groupName) {
+                let counts = [];
+                for (let item of items) {
+                    let name = groupName(item);
+                    let known = counts.findIndex(c => c.name == name);
+                    if (known == -1) {
+                        counts.push({name, count: 1});
+                    } else {
+                        counts[known].count++;
+                    }
+                }
+                return counts;
+            }
+
+            console.log(countBy([1, 2, 3, 4, 5], n => n > 2));
+            // → [{name: false, count: 2}, {name: true, count: 3}]
+
+        The countBy() function expects a collection (anything that we can loop over with for/of) and 
+        a function that computes a group name for a given element. It returns an array of objects, 
+        each of which names a group and tells you the number of elements that were found in that group.
+
+        findIndex() ARRAY METHOD
+        The above code uses another array method — findIndex(). This method is somewhat like indexOf(), 
+        but instead of looking for a specific value, it finds the first value for which the given 
+        function returns true. Like indexOf() , it returns -1 when no such element is found.
+
+    Using countBy(), we can write the function that tells us which "SCRIPTS" are used in a piece of text.
+        Code-
+            function textScripts(text) {
+                let scripts = countBy(text, char => {
+                    let script = characterScript(char.codePointAt(0));
+                    return script ? script.name : "none";
+                }).filter(({name}) => name != "none");
+                
+                console.log(scripts); // [ 0:{name: "Han", count: 11} , 1:	{name: "Latin", count: 4}, 2:	{name: "Cyrillic", count: 3}]
+                
+                let total = scripts.reduce((n, {count}) => n + count, 0);
+                
+                console.log(total); // 18
+                
+                if (total == 0) return "No scripts found";
+
+                return scripts.map(({name, count}) => {
+                    return `${Math.round(count * 100 / total)}% ${name}`;
+                }).join(", ");
+            }
+
+            console.log(textScripts('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
+            // → 61% Han, 22% Latin, 17% Cyrillic
+
+        The function first counts the characters by name, using characterScript to assign them 
+        a name and falling back to the string "none" for characters that aren’t part of any 
+        script. The filter call drops the entry for "none" from the resulting array since we 
+        aren’t interested in those characters.
+        To be able to compute percentages, we first need the total number of characters that 
+        belong to a script, which we can compute with reduce. If no such characters are found, 
+        the function returns a specific string. Otherwise, it transforms the counting entries 
+        into readable strings with map and then combines them with join.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

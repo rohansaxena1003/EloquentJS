@@ -1,0 +1,356 @@
+In this chapter, we will start to do things that can actually be called programming.
+
+EXPRESSIONS AND STATEMENTS
+
+    EXPRESSION 
+    A fragment of code that produces a value is called an "EXPRESSION". 
+    Every value that is written literally (such as 22 or "psychoanalysis") 
+    is an expression. An expression between parentheses is also an 
+    expression, as is a binary operator applied to two expressions 
+    or a unary operator applied to one.
+
+        Expressions can contain other expressions in a way similar to how 
+        subsentences in human languages are nested—a subsentence can 
+        contain its own subsentences, and so on.
+
+    STATEMENTS 
+    If an expression corresponds to a sentence fragment,
+    "a JavaScript statement corresponds to a full sentence". 
+        -> A program is a list of statements.
+
+    The simplest kind of statement is an expression with a semicolon after it.
+
+        SIDE-EFFECTS
+        A statement stands on its own, so it amounts to something only 
+        if it affects the world. It could display something on the 
+        screen—that counts as changing the world—or it could change 
+        the internal state of the machine in a way that will affect 
+        the statements that come after it. 
+        These changes are called "SIDE-EFFECTS".
+
+    --> "Use semi-colon at end of line wherever necessary".
+
+
+BINDINGS / VARIABLES 
+    To catch and hold values, JavaScript provides a thing 
+    called a "BINDING", or "VARIABLE":
+
+    let caught = 5 * 5;
+        The special word (keyword) let indicates that this 
+        sentence is going to define a binding. 
+        It is followed by the name of the binding and, if 
+        we want to immediately give it a value, we give 
+        it by an = operator and an expression.
+
+    After a binding has been defined, its name can be 
+    used as an expression. The value of such an 
+    expression is the value the binding currently holds. 
+    Here’s an example:
+        let ten = 10;
+        console.log(ten * ten);
+        // → 100
+
+    When a binding points at a value, that does not mean 
+    it is tied to that value forever. The = operator can 
+    be used at any time on existing bindings to 
+    disconnect them from their current value and 
+    have them point to a new one.
+    EXAMPLE Code:
+        let mood = "light";
+        console.log(mood);
+        // → light
+        mood = "dark";
+        console.log(mood);
+        // → dark
+
+    A single let statement may define multiple bindings. 
+    The definitions must be separated by commas.
+    Code: 
+        let one = 1, two = 2;
+        console.log(one + two);
+        // → 3
+
+    The words var and const can also be used to create bindings, 
+    in a way similar to let.
+    Code: 
+        var name = "Ayda";
+        const greeting = "Hello ";
+        console.log(greeting + name);
+        // → Hello Ayda
+
+
+    TENTACLES 
+        You should imagine bindings as tentacles, rather than boxes. 
+        They do not contain values; 
+        they grasp them— two bindings can refer to the same value. 
+        A program can access only the values that it still has a 
+        reference to. 
+
+        When you need to remember something, you grow a tentacle 
+        to hold on to it 
+        or you reattach one of your existing tentacles to it.
+
+        When you define a binding without giving it a value, 
+        the tentacle has nothing to grasp, so it ends in thin air. 
+        If you ask for the value of an empty binding, 
+        you’ll get the value undefined.
+        let job;
+        console.log(job);
+        // → undefined
+
+
+BINDING NAMES 
+Binding names can be any word. 
+
+    Digits can be part of binding names — catch22 is a valid name, for example.
+
+    But the name must not start with a digit. 
+
+    A binding name may include dollar signs ($) or underscores (_) 
+    but no other punctuation or special characters.
+
+    Words with a special meaning, such as let, are keywords, 
+    and they may not be used as binding names. 
+
+    There are also a number of words that are “reserved for use” 
+    in future versions of JavaScript, 
+    which also can’t be used as binding names. 
+
+
+THE ENVIRONMENT 
+The collection of bindings and their values that exist 
+at a given time is called the environment. 
+
+    When a program starts up, this environment is not empty. 
+    It always contains bindings that are part of the 
+    language standard, and most of the time, it also has 
+    bindings that provide ways to interact with the surrounding system. 
+
+        For example, in a browser, there are functions to 
+        interact with the currently loaded website and to 
+        read mouse and keyboard input.
+
+
+FUNCTIONS 
+A function is a piece of program wrapped in a value. 
+Such values can be applied in order to run the wrapped program. 
+
+    Executing a function is called invoking, calling, or applying it. 
+
+    You can call a function by putting parentheses after an 
+    expression that produces a function value.
+
+    Values given to functions are called arguments. 
+    Different functions might need a different number 
+    or 
+    different types of arguments.
+
+
+CONSOLE.LOG FUNCTION 
+Most JavaScript systems (including all modern web 
+browsers and Node.js) provide a console.log function 
+that writes out its arguments to some text output device. 
+
+    Though binding names cannot contain period characters, 
+    console.log does have one. 
+    This is because console.log isn’t a simple binding. 
+    It is actually an expression that retrieves the log 
+    property from the value held by the console binding. 
+
+
+NUMBER function
+The function Number converts a value to a number. 
+
+    We need 
+    that conversion because the result of prompt is a string 
+    value, and we want a number. There are similar functions 
+    called String and Boolean that convert values to those types.
+
+    The Number function happens to return NaN when you give it a 
+    string that doesn’t represent a valid number.
+
+
+NUMBER.isNaN
+    The Number.isNaN function is a standard JavaScript function that 
+    returns true only if the argument it is given is NaN.
+
+
+BLOCK 
+    The curly{} braces can be used to group any number of 
+    statements into a single statement, called a "BLOCK". 
+
+
+RETURN VALUES 
+When a function produces a value, it is said to return that value.
+
+    When functions produce value(s), they don’t 
+    need to have a side effect to be useful. For example, the 
+    function Math.max takes any amount of number arguments and 
+    gives back the greatest.
+        Code:
+        console.log(Math.max(2, 4));
+        // → 4
+   
+    Anything that produces a value is an expression in JavaScript, 
+    which means function calls can be used within larger expressions. 
+    Here a call to Math.min, which is the opposite of Math.max, is 
+    used as part of a plus expression:
+        console.log(Math.min(2, 4) + 100);
+        // → 102
+
+
+CONTROL FLOW 
+    When your program contains more than one statement, 
+    the statements are executed as if they are a story, 
+    "FROM TOP TO BOTTOM".
+
+
+CONDITIONAL EXECUTION(IF ELSE)
+Not all programs are straight roads. We may, for example, 
+want to create a branching road, where the program takes 
+the proper branch based on the situation at hand. 
+This is called conditional execution.
+
+
+WHILE LOOPS
+A statement starting with the keyword while creates a loop. 
+The word while is followed by an expression in parentheses 
+and then a statement, much like if. The loop keeps entering 
+that statement as long as the expression produces a value 
+that gives true when converted to Boolean.
+    Code:
+    let result = 1;
+    let counter = 0;
+    while (counter < 10) {
+    result = result * 2;
+    counter = counter + 1;
+    }
+    console.log(result);
+    // → 1024
+
+
+DO LOOP 
+A do loop is a control structure similar to a while loop. 
+It differs only on one point: a do loop always executes 
+its body at least once, and it starts testing whether it 
+should stop only after that first execution. 
+
+    To reflect this, the test appears after the body of the loop.
+        CODE:
+            let yourName;
+            do {
+                yourName = prompt("Who are you?");
+            } while (!yourName);
+            console.log(yourName);
+
+
+INDENTING CODE 
+With proper indentation, the visual shape of a program 
+corresponds to the shape of the blocks inside it.
+    This helps in understanding more easily and better way.
+
+
+FOR LOOPS 
+The parentheses after a for keyword must contain two semicolons. 
+The part before the first semicolon initializes the loop, usually 
+by defining a binding. The second part is the expression that 
+checks whether the loop must continue. The final part updates the 
+state of the loop after every iteration.
+    Code: 
+    let result = 1;
+    for (let counter = 0; counter < 10; counter = counter + 1) {
+    result = result * 2;
+    }
+    console.log(result);
+    // → 1024
+
+
+BREAKING OUT OF A LOOP 
+Having the looping condition produce false is not the only 
+way a loop can finish. 
+
+    BREAK STATEMENT 
+    There is a special statement called "BREAK" that has the 
+    effect of immediately jumping out of the enclosing loop.
+    Code:
+        for (let current = 20; ; current = current + 1) {
+            if (current % 7 == 0) {
+                console.log(current);
+                break;
+            }
+        }
+        // → 21
+
+    INFINITE LOOP 
+    If you were to remove that break statement or you accidentally 
+    write an end condition that always produces true, your program 
+    would get stuck in an "INFINITE LOOP". A program stuck in an 
+    infinite loop will never finish running, which is usually a bad thing.
+
+    CONTINUE STATEMENT
+    The continue keyword is similar to break, in that it influences 
+    the progress of a loop. When continue is encountered in a loop 
+    body, control jumps out of the body and continues with the 
+    loop’s next iteration.
+
+
+DISPATCHING ON A VALUE WITH SWITCH
+    EXAMPLE Code:
+        switch (prompt("What is the weather like?")) {
+            case "rainy":
+                console.log("Remember to bring an umbrella.");
+                break;
+            case "sunny":
+                console.log("Dress lightly.");
+            case "cloudy":
+                console.log("Go outside.");
+                break;
+            default:
+                console.log("Unknown weather type!");
+                break;
+        }
+
+    You may put any number of case labels inside the block opened by 
+    switch. The program will start executing at the label that 
+    corresponds to the value that switch was given, or at default if 
+    no matching value is found. "IT WILL CONTINUE EXECUTING, EVEN 
+    ACROSS OTHER LABELS, UNTIL IT REACHES A BREAK STATEMENT". In some 
+    cases, such as the "sunny" case in the example, this can be used 
+    to share some code between cases (it recommends going outside for 
+    both sunny and cloudy weather). 
+
+    But be careful—it is easy to forget such a break, which will 
+    cause the program to execute code you do not want executed.
+
+
+CAPITALIZATION
+The standard JavaScript functions, and most JavaScript programmers, 
+follow the bottom style—they capitalize every word except the first. 
+    Example - fuzzyLittleTurtle
+
+
+COMMENTS
+    SINGLE-LINE COMMENTS
+    To write a single-line comment, you can use two slash characters (//) 
+    and then the comment text after it.
+        Code:
+        let accountBalance = calculateBalance(account);
+        // It's a green hollow where a river sings
+        accountBalance.adjust();
+        // Madly catching white tatters in the grass.
+        let report = new Report();
+        // Where the sun on the proud mountain rings:
+        addToReport(accountBalance, report);
+        // It's a little valley, foaming like light in a glass.
+
+    MULTI-LINE COMMENTS
+    A section of text between /* and */ will be ignored in its entirety, 
+    regardless of whether it contains line breaks. This is useful for 
+    adding blocks of information about a file or a chunk of program.
+        Code:
+        /*
+        I first found this number scrawled on the back of an old
+        notebook. Since then, it has often dropped by, showing up in
+        phone numbers and the serial numbers of products that I've
+        bought. It obviously likes me, so I've decided to keep it.
+        */
